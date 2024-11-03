@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Formulario } from './componentes/Formulario';
 import { Home } from './componentes/Home';
-
+import Usuarios from './componentes/Usuarios'; // Import correcto
 import { useState } from 'react';
 import './App.css';
 
@@ -13,6 +13,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={!user ? <Formulario setUser={setUser} /> : <Home user={user} />} />
+          <Route path="/usuarios" element={<Usuarios />} />
+
         </Routes>
       </div>
     </Router>
@@ -20,5 +22,3 @@ function App() {
 }
 
 export default App;
-
-
