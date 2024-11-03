@@ -1,0 +1,89 @@
+/* Botón de despliegue angosto y alineado a la esquina superior izquierda */
+.toggle-button {
+    position: fixed;
+    width: 50px;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(143, 23, 23, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem; /* Más angosto */
+    color: white;
+    font-size: 1rem; /* Tamaño de fuente reducido */
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Estilo para la barra lateral desplegable */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Oculto inicialmente fuera de la pantalla */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(170, 30, 30, 0.9); /* Color semi-transparente */
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 0.3s ease; /* Transición suave */
+}
+
+.sidebar.open {
+    left: 0; /* Muestra el sidebar */
+}
+
+.sidebar h2 {
+    color: #fff;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Tamaño uniforme para los botones del menú */
+.menu-button {
+    width: 120%; /* Para hacer que todos los botones tengan el mismo ancho */
+    padding: 0.75rem; /* Tamaño uniforme para todos */
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    margin-left: 250px; /* Ajusta el margen para no sobreponer al sidebar */
+}
+
+/* Información del usuario en la esquina superior derecha */
+.user-info {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    color: white;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+

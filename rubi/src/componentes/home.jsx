@@ -1,108 +1,65 @@
-/*
-export function Home({ user }){
-    return (
-        <div>
-            <h1>Bienvenido</h1>
-            <h2>{user}</h2>
-        </div>
-    )
-}
-    */
-   /*
-import PropTypes from 'prop-types'  // Importa PropTypes
-
-export function Home({ user }) {   // Asegúrate de recibir `user` como prop
-    return (
-        <div>
-            <h1>Bienvenido</h1>
-            <p>Usuario: {user[0]}</p>
-
-        </div>
-    )
-}
-
-// Validación de PropTypes para user
-Home.propTypes = {
-    user: PropTypes.arrayOf(PropTypes.string).isRequired
-}
-*/
-{/*
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types'  // Importa PropTypes
-export function Home({ user }) {
-    return (
-        <div>
-            <h1>Bienvenido {user}</h1>
-            {user.role === "admin" && ( // Solo se muestra si el usuario es admin
-                <div>
-                    <h2>Opciones Administrativas</h2>
-                    <Link to="/agregar-usuario">
-                        <button>Agregar Usuario</button>
-                    </Link>
-                    {/*
-                    <Link to="/editar-empleado">
-                        <button>Editar Empleado</button>
-                    </Link>
-                    <Link to="/borrar-empleado">
-                        <button>Borrar Empleado</button>
-                    </Link>
-                    <Link to="/balance">
-                        <button>Ver Balance</button>
-                    </Link>
-                    <Link to="/stock">
-                        <button>Ver Stock</button>
-                    </Link>
-                    
-                </div>
-            )}
-        </div>
-    );
-    
-}
-// Validación de PropTypes para user
-Home.propTypes = {
-    user: PropTypes.arrayOf(PropTypes.string).isRequired
-}
-
-*/}
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';  // Importa PropTypes
+import PropTypes from 'prop-types';
+import './Home.css';
 
 export function Home({ user }) {
     return (
-        <div>
-            <h1>Bienvenido {user.name}</h1> {/* Cambiado para mostrar el nombre del usuario */}
-            {user.role === "admin"  && ( // Solo se muestra si el usuario es admin
-                <div>
-                    <h2>Opciones Administrativas</h2>
-                    <Link to="/registrar-empleado">
-                        <button>Registrar Empleado</button>
-                    </Link>
-                    {/* Puedes descomentar las siguientes líneas para habilitar más opciones */}
-                    {/* 
-                    <Link to="/editar-empleado">
-                        <button>Editar Empleado</button>
-                    </Link>
-                    <Link to="/borrar-empleado">
-                        <button>Borrar Empleado</button>
-                    </Link>
-                    <Link to="/balance">
-                        <button>Ver Balance</button>
-                    </Link>
-                    <Link to="/stock">
-                        <button>Ver Stock</button>
-                    </Link>
-                    */}
-                </div>
-            )}
+        <div className="container">
+            {/* Botón de despliegue de la barra de navegación */}
+            <button className="toggle-button" onClick={() => document.querySelector('.sidebar').classList.toggle('open')}>
+                ☰
+            </button>
+            
+            {/* Barra lateral de navegación */}
+            <div className="sidebar">
+                <h2>Panel de Navegación</h2>
+                <Link to="/usuarios">
+                    <button className="menu-button">Usuarios</button>
+                </Link>
+                <Link to="/proveedores">
+                    <button className="menu-button">Proveedores</button>
+                </Link>
+                <Link to="/sucursales">
+                    <button className="menu-button">Sucursales</button>
+                </Link>
+                <Link to="/productos">
+                    <button className="menu-button">Productos</button>
+                </Link>
+                <Link to="/ventas">
+                    <button className="menu-button">Ventas</button>
+                </Link>
+                {user.role === 'admin' && (
+                    <>
+                        <Link to="/stock">
+                            <button className="menu-button">Stock</button>
+                        </Link>
+                        <Link to="/reportes">
+                            <button className="menu-button">Reportes</button>
+                        </Link>
+                    </>
+                )}
+            </div>
+
+            {/* Sección de información del usuario */}
+            <div className="user-info">
+                <span>Usuario: {user.role}</span>
+            </div>
+
+            <div className="main-content">
+                {/* Aquí va el contenido principal */}
+            </div>
         </div>
     );
 }
 
-// Validación de PropTypes para user
 Home.propTypes = {
-    user: PropTypes.shape({  // Cambiado para reflejar que user es un objeto
+    user: PropTypes.shape({
         name: PropTypes.string.isRequired,
         role: PropTypes.string.isRequired,
-    }).isRequired
+    }).isRequired,
 };
+
+
+
