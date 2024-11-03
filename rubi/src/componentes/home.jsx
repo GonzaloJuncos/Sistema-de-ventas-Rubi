@@ -15,27 +15,27 @@ export function Home({ user }) {
             {/* Barra lateral de navegación */}
             <div className="sidebar">
                 <h2>Panel de Navegación</h2>
-                <Link to="/usuarios">
+                <Link to="/Usuarios">
                     <button className="menu-button">Usuarios</button>
                 </Link>
-                <Link to="/proveedores">
+                <Link to="/Proveedores">
                     <button className="menu-button">Proveedores</button>
                 </Link>
-                <Link to="/sucursales">
+                <Link to="/Sucursales">
                     <button className="menu-button">Sucursales</button>
                 </Link>
-                <Link to="/productos">
+                <Link to="/Productos">
                     <button className="menu-button">Productos</button>
                 </Link>
-                <Link to="/ventas">
+                <Link to="/Ventas">
                     <button className="menu-button">Ventas</button>
                 </Link>
                 {user.role === 'admin' && (
                     <>
-                        <Link to="/stock">
+                        <Link to="/Stock">
                             <button className="menu-button">Stock</button>
                         </Link>
-                        <Link to="/reportes">
+                        <Link to="/Reportes">
                             <button className="menu-button">Reportes</button>
                         </Link>
                     </>
