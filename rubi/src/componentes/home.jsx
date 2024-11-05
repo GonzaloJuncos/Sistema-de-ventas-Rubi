@@ -1,10 +1,17 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './Home.css';
 
-export function Home({ user }) {
+export function Home({ user, setUser }) {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        setUser(null); // Limpia el estado del usuario
+        navigate('/'); // Redirige a la página de inicio de sesión
+    };
+
     return (
         <div className="container">
             {/* Botón de despliegue de la barra de navegación */}
@@ -45,6 +52,7 @@ export function Home({ user }) {
             {/* Sección de información del usuario */}
             <div className="user-info">
                 <span>Bienvenido, {user.name}</span>
+                <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
             </div>
 
             <div className="main-content">
@@ -59,4 +67,5 @@ Home.propTypes = {
         name: PropTypes.string.isRequired,
         role: PropTypes.string.isRequired,
     }).isRequired,
+    setUser: PropTypes.func.isRequired,
 };

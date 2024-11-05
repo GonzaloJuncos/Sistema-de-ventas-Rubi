@@ -12,9 +12,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={!user ? <Formulario setUser={setUser} /> : <Home user={user} />} />
+          <Route path="/" element={!user ? <Formulario setUser={setUser} /> : <Home user={user} setUser={setUser} />} />
           <Route path="/usuarios" element={<Usuarios />} />
-
         </Routes>
       </div>
     </Router>

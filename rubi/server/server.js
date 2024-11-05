@@ -1,3 +1,4 @@
+
 // server.js
 import express from 'express';
 import mysql from 'mysql2';
@@ -6,9 +7,11 @@ import cors from 'cors';
 const app = express();
 const PORT = 3001;
 
+// Middleware para permitir solicitudes de otros dominios y recibir datos JSON
 app.use(cors());
 app.use(express.json());
 
+// Configuración de la conexión con la base de datos MySQL
 const db = mysql.createConnection({
   host: 'localhost',
   port: '3306',
@@ -17,6 +20,7 @@ const db = mysql.createConnection({
   database: 'SistemaVentas'
 });
 
+// Conecta a MySQL y verifica si hay errores
 db.connect((err) => {
   if (err) {
     console.error('Error al conectar a MySQL:', err);
@@ -25,7 +29,7 @@ db.connect((err) => {
   console.log('Conectado a MySQL');
 });
 
-// Ruta de login
+// Ruta de inicio de sesión
 app.post('/api/login', (req, res) => {
   const { documento, clave } = req.body;
 
@@ -45,12 +49,13 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
     }
 
+    // Si hay resultados, devuelve los datos del usuario
     const user = results[0];
     res.json({ id: user.idUsuario, nombre: user.NombreCompleto, rol: user.Rol });
   });
 });
 
-// Rutas para obtener y registrar usuarios
+// Ruta para obtener la lista de usuarios
 app.get('/api/usuarios', (req, res) => {
   const query = `
     SELECT u.idUsuario, u.NombreCompleto, u.Correo, r.Descripcion as Rol
@@ -66,7 +71,7 @@ app.get('/api/usuarios', (req, res) => {
   });
 });
 
-// Carga de Usuarios 
+// Ruta para registrar un nuevo usuario
 app.post('/api/usuarios', (req, res) => {
   const { documento, nombreCompleto, correo, telefono, clave, idRol } = req.body;
 
@@ -84,6 +89,42 @@ app.post('/api/usuarios', (req, res) => {
   });
 });
 
+// Ruta para eliminar un usuario por ID
+app.delete('/api/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM USUARIO WHERE idUsuario = ?`;
+
+  db.query(query, [id], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error al eliminar usuario' });
+    }
+    res.status(200).json({ message: 'Usuario eliminado exitosamente' });
+  });
+});
+
+// Ruta para actualizar un usuario por ID
+app.put('/api/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  const { documento, nombreCompleto, correo, telefono, clave, idRol } = req.body;
+
+  const query = `
+    UPDATE USUARIO
+    SET Documento = ?, NombreCompleto = ?, Correo = ?, Telefono = ?, Clave = ?, idRol = ?
+    WHERE idUsuario = ?
+  `;
+
+  db.query(query, [documento, nombreCompleto, correo, telefono, clave, idRol, id], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error al actualizar usuario' });
+    }
+    res.status(200).json({ message: 'Usuario actualizado exitosamente' });
+  });
+});
+
+// Inicia el servidor en el puerto especificado
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
