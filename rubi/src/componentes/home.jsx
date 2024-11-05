@@ -44,7 +44,7 @@ export function Home({ user }) {
 
             {/* Sección de información del usuario */}
             <div className="user-info">
-                <span>Usuario: {user.role}</span>
+                <span>Bienvenido, {user.name}</span>
             </div>
 
             <div className="main-content">
@@ -60,6 +60,3 @@ Home.propTypes = {
         role: PropTypes.string.isRequired,
     }).isRequired,
 };
-
-
-

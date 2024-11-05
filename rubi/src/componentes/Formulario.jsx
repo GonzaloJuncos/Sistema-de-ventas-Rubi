@@ -1,32 +1,29 @@
-
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import "./Formulario.css";
-import profileIcon from "../assets/profile-icon.png"; // Ruta corregida
+import profileIcon from "../assets/profile-icon.png";
 
 export function Formulario({ setUser }) {
     const [nombre, setNombre] = useState("");
     const [contraseña, setContraseña] = useState("");
     const [error, setError] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const adminCredentials = { name: "Admin", password: "admin123" };
-        const userCredentials = { name: "User", password: "user123" };
 
-        if (nombre === "" || contraseña === "") {
-            setError(true);
-            return;
-        }
+        try {
+            const response = await axios.post('http://localhost:3001/api/login', {
+                documento: nombre,
+                clave: contraseña,
+            });
 
-        setError(false);
-
-        if (nombre === adminCredentials.name && contraseña === adminCredentials.password) {
-            setUser({ name: nombre, role: "admin" });
-        } else if (nombre === userCredentials.name && contraseña === userCredentials.password) {
-            setUser({ name: nombre, role: "user" });
-        } else {
+            const { id, nombre: userName, rol } = response.data;
+            setUser({ id, name: userName, role: rol });
+            setError(false);
+        // eslint-disable-next-line no-unused-vars
+        } catch (err) {
             setError(true);
         }
     };
@@ -41,7 +38,7 @@ export function Formulario({ setUser }) {
                         <input
                             type="text"
                             value={nombre}
-                            placeholder="Usuario"
+                            placeholder="Documento"
                             onChange={(e) => setNombre(e.target.value)}
                         />
                     </div>
@@ -55,7 +52,7 @@ export function Formulario({ setUser }) {
                     </div>
                     <button type="submit">Iniciar Sesion</button>
                 </form>
-                {error && <p className="error-message">Incorrect credentials or fields are empty.</p>}
+                {error && <p className="error-message">Usuario o Contraseña Incorrectos.</p>}
             </div>
         </div>
     );
@@ -64,4 +61,3 @@ export function Formulario({ setUser }) {
 Formulario.propTypes = {
     setUser: PropTypes.func.isRequired,
 };
-
