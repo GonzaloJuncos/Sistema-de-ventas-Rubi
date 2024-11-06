@@ -7,6 +7,7 @@ import './Home.css';
 export function Home({ user, setUser }) {
     const navigate = useNavigate();
 
+    // Función para manejar el logout
     const handleLogout = () => {
         setUser(null); // Limpia el estado del usuario
         navigate('/'); // Redirige a la página de inicio de sesión
@@ -18,31 +19,31 @@ export function Home({ user, setUser }) {
             <button className="toggle-button" onClick={() => document.querySelector('.sidebar').classList.toggle('open')}>
                 ☰
             </button>
-            
+
             {/* Barra lateral de navegación */}
             <div className="sidebar">
                 <h2>Panel de Navegación</h2>
-                <Link to="/Usuarios">
+                <Link to="/usuarios">
                     <button className="menu-button">Usuarios</button>
                 </Link>
-                <Link to="/Proveedores">
+                <Link to="/proveedores">
                     <button className="menu-button">Proveedores</button>
                 </Link>
-                <Link to="/Sucursales">
+                <Link to="/sucursales">
                     <button className="menu-button">Sucursales</button>
                 </Link>
-                <Link to="/Productos">
+                <Link to="/productos">
                     <button className="menu-button">Productos</button>
                 </Link>
-                <Link to="/Ventas">
+                <Link to="/ventas">
                     <button className="menu-button">Ventas</button>
                 </Link>
                 {user.role === 'admin' && (
                     <>
-                        <Link to="/Stock">
+                        <Link to="/stock">
                             <button className="menu-button">Stock</button>
                         </Link>
-                        <Link to="/Reportes">
+                        <Link to="/reportes">
                             <button className="menu-button">Reportes</button>
                         </Link>
                     </>

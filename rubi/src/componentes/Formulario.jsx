@@ -10,21 +10,23 @@ export function Formulario({ setUser }) {
     const [contraseña, setContraseña] = useState("");
     const [error, setError] = useState(false);
 
+    // Manejador del envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
+            // Realiza la solicitud a la API de login
             const response = await axios.post('http://localhost:3001/api/login', {
                 documento: nombre,
                 clave: contraseña,
             });
 
+            // Desestructuración de la respuesta
             const { id, nombre: userName, rol } = response.data;
-            setUser({ id, name: userName, role: rol });
-            setError(false);
+            setUser({ id, name: userName, role: rol }); // Guarda el usuario en el estado
+            setError(false); // Resetea el error si la autenticación fue exitosa
         // eslint-disable-next-line no-unused-vars
         } catch (err) {
-            setError(true);
+            setError(true); // Muestra error en caso de fallo
         }
     };
 
@@ -50,7 +52,7 @@ export function Formulario({ setUser }) {
                             onChange={(e) => setContraseña(e.target.value)}
                         />
                     </div>
-                    <button type="submit">Iniciar Sesion</button>
+                    <button type="submit">Iniciar Sesión</button>
                 </form>
                 {error && <p className="error-message">Usuario o Contraseña Incorrectos.</p>}
             </div>
