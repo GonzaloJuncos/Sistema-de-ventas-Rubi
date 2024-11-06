@@ -15,12 +15,7 @@ export function Home({ user, setUser }) {
 
     return (
         <div className="container">
-            {/* Botón de despliegue de la barra de navegación */}
-            <button className="toggle-button" onClick={() => document.querySelector('.sidebar').classList.toggle('open')}>
-                ☰
-            </button>
-
-            {/* Barra lateral de navegación */}
+            {/* Barra lateral de navegación siempre visible */}
             <div className="sidebar">
                 <h2>Panel de Navegación</h2>
                 <Link to="/usuarios">
@@ -48,12 +43,11 @@ export function Home({ user, setUser }) {
                         </Link>
                     </>
                 )}
-            </div>
-
-            {/* Sección de información del usuario */}
-            <div className="user-info">
-                <span>Bienvenido, {user.name}</span>
-                <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
+                {/* Información del usuario al final */}
+                <div className="user-info">
+                    <span>Bienvenido, {user.name}</span>
+                    <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
+                </div>
             </div>
 
             <div className="main-content">
@@ -63,10 +57,4 @@ export function Home({ user, setUser }) {
     );
 }
 
-Home.propTypes = {
-    user: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        role: PropTypes.string.isRequired,
-    }).isRequired,
-    setUser: PropTypes.func.isRequired,
-};
+
