@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Formulario } from './componentes/Formulario';
 import { Home } from './componentes/Home';
 import Usuarios from './componentes/Usuarios'; // Import correcto
+import Proveedores from './componentes/Proveedores';
+
 import { useState, useEffect } from 'react';
 import './App.css';
 
@@ -34,6 +36,8 @@ function App() {
           <Route path="/usuarios" element={<Usuarios />} />
           {/* Ruta para el componente Home */}
           <Route path="/home" element={<Home user={user} setUser={setUser} />} />
+          <Route path="/proveedores" element={<Proveedores />} />
+
         </Routes>
       </div>
     </Router>
