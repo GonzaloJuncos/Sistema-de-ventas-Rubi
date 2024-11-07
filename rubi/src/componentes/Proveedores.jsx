@@ -1,3 +1,4 @@
+// Proveedores.jsx
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -13,8 +14,8 @@ function Proveedores() {
         telefono: '',
         email: '',
         tipoProveedor: '',
-        estado: '1', // Estado inicial: Activo (1)
-        fechaRegistro: '' // Campo para la fecha de registro
+        estado: true,
+        fechaRegistro: '' // Nuevo campo para la fecha
     });
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +24,6 @@ function Proveedores() {
     useEffect(() => {
         const fetchProveedores = async () => {
             try {
-                // Ajusta la URL para conectarte al backend
                 const response = await axios.get('http://localhost:3001/api/proveedores');
                 setProveedores(response.data);
             } catch (err) {
@@ -35,7 +35,7 @@ function Proveedores() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData({ ...formData, [name]: name === 'estado' ? value === '1' : value });
     };
 
     const handleSubmit = async (e) => {
@@ -46,17 +46,12 @@ function Proveedores() {
                 setIsEditing(false);
                 setEditingProveedorId(null);
             } else {
-                // Si no se está editando, agrega la fecha de registro actual automáticamente
-                const newFormData = { ...formData, fechaRegistro: new Date().toISOString().split('T')[0] }; // Formato: YYYY-MM-DD
-                await axios.post('http://localhost:3001/api/proveedores', newFormData);
+                await axios.post('http://localhost:3001/api/proveedores', formData);
             }
-
-            // Reinicia el formulario y oculta el formulario de registro
             setShowForm(false);
-            setFormData({ nombre: '', direccion: '', telefono: '', email: '', tipoProveedor: '', estado: '1', fechaRegistro: '' });
+            setFormData({ nombre: '', direccion: '', telefono: '', email: '', tipoProveedor: '', estado: true, fechaRegistro: '' });
             setError(null);
 
-            // Recarga la lista de proveedores
             const response = await axios.get('http://localhost:3001/api/proveedores');
             setProveedores(response.data);
         // eslint-disable-next-line no-unused-vars
@@ -69,8 +64,9 @@ function Proveedores() {
         try {
             await axios.delete(`http://localhost:3001/api/proveedores/${id}`);
             setProveedores(proveedores.filter((proveedor) => proveedor.idProveedor !== id));
+        // eslint-disable-next-line no-unused-vars
         } catch (err) {
-            console.error('Error al eliminar proveedor:', err);
+            setError('Error al eliminar proveedor');
         }
     };
 
@@ -81,12 +77,12 @@ function Proveedores() {
             telefono: proveedor.Telefono,
             email: proveedor.Email,
             tipoProveedor: proveedor.TipoProveedor,
-            estado: proveedor.Estado ? '1' : '0', // Convertir a string para el select
-            fechaRegistro: proveedor.FechaRegistro // Muestra la fecha existente
+            estado: !!proveedor.Estado,
+            fechaRegistro: proveedor.FechaRegistro ? proveedor.FechaRegistro.slice(0, 10) : ''
         });
-        setShowForm(true);
         setIsEditing(true);
         setEditingProveedorId(proveedor.idProveedor);
+        setShowForm(true);
     };
 
     const handleSearchChange = (e) => {
@@ -111,19 +107,11 @@ function Proveedores() {
                         <input type="text" name="telefono" placeholder="Teléfono" value={formData.telefono} onChange={handleChange} />
                         <input type="email" name="email" placeholder="Correo" value={formData.email} onChange={handleChange} />
                         <input type="text" name="tipoProveedor" placeholder="Tipo de Proveedor" value={formData.tipoProveedor} onChange={handleChange} />
-                        <select name="estado" value={formData.estado} onChange={handleChange}>
+                        <select name="estado" value={formData.estado ? '1' : '0'} onChange={handleChange}>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
-                        <input
-                            type="date"
-                            name="fechaRegistro"
-                            placeholder="Fecha de Registro"
-                            value={formData.fechaRegistro}
-                            onChange={handleChange}
-                            required
-                            disabled={isEditing} // Solo permite edición en modo de registro
-                        />
+                        <input type="date" name="fechaRegistro" value={formData.fechaRegistro} onChange={handleChange} /> {/* Campo de fecha */}
                         <button type="submit">{isEditing ? 'Actualizar' : 'Registrar'}</button>
                     </form>
                     {error && <p className="error-message">{error}</p>}
@@ -145,9 +133,9 @@ function Proveedores() {
                         <th>Dirección</th>
                         <th>Teléfono</th>
                         <th>Correo</th>
-                        <th>Tipo de Proveedor</th>
+                        <th>Tipo Proveedor</th>
                         <th>Estado</th>
-                        <th>Fecha de Registro</th>
+                        <th>Fecha Registro</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -162,8 +150,8 @@ function Proveedores() {
                             <td>{proveedor.Estado ? 'Activo' : 'Inactivo'}</td>
                             <td>{new Date(proveedor.FechaRegistro).toLocaleDateString()}</td>
                             <td>
-                                <button className="action-button" onClick={() => handleEdit(proveedor)}>Editar</button>
-                                <button className="action-button delete" onClick={() => handleDelete(proveedor.idProveedor)}>Eliminar</button>
+                                <button onClick={() => handleEdit(proveedor)}>Editar</button>
+                                <button onClick={() => handleDelete(proveedor.idProveedor)}>Eliminar</button>
                             </td>
                         </tr>
                     ))}
@@ -174,5 +162,3 @@ function Proveedores() {
 }
 
 export default Proveedores;
-
-
