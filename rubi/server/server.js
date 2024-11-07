@@ -1,4 +1,3 @@
-
 // server.js
 import express from 'express';
 import mysql from 'mysql2';
@@ -16,7 +15,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   port: '3306',
   user: 'root',
-  password: '45516905',
+  password: 'matute',
   database: 'SistemaVentas'
 });
 
@@ -49,7 +48,6 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
     }
 
-    // Si hay resultados, devuelve los datos del usuario
     const user = results[0];
     res.json({ id: user.idUsuario, nombre: user.NombreCompleto, rol: user.Rol });
   });
@@ -124,55 +122,35 @@ app.put('/api/usuarios/:id', (req, res) => {
   });
 });
 
-
-// Obtener lista de proveedores
+// Ruta para obtener la lista de proveedores
 app.get('/api/proveedores', (req, res) => {
   const query = `SELECT * FROM PROVEEDOR`;
   db.query(query, (err, results) => {
-    if (err) return res.status(500).json({ message: 'Error al obtener proveedores' });
+    if (err) {
+      console.error('Error al obtener proveedores:', err);
+      return res.status(500).json({ message: 'Error al obtener proveedores' });
+    }
     res.json(results);
   });
 });
 
-// Crear nuevo proveedor
+// Ruta para crear un nuevo proveedor
 app.post('/api/proveedores', (req, res) => {
-  const { nombre, direccion, telefono, correo, tipoProveedor, estado } = req.body;
+  const { nombre, direccion, telefono, email, tipoProveedor, estado } = req.body;
+
   const query = `
     INSERT INTO PROVEEDOR (Nombre, Direccion, Telefono, Email, TipoProveedor, Estado, FechaRegistro) 
     VALUES (?, ?, ?, ?, ?, ?, NOW())
   `;
-  db.query(query, [nombre, direccion, telefono, correo, tipoProveedor, estado], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Error al crear proveedor' });
+
+  db.query(query, [nombre, direccion, telefono, email, tipoProveedor, estado ? 1 : 0], (err) => {
+    if (err) {
+      console.error('Error al crear proveedor:', err);
+      return res.status(500).json({ message: 'Error al crear proveedor', error: err });
+    }
     res.status(201).json({ message: 'Proveedor creado exitosamente' });
   });
 });
-
-// Editar proveedor
-app.put('/api/proveedores/:id', (req, res) => {
-  const { id } = req.params;
-  const { nombre, direccion, telefono, correo, tipoProveedor, estado } = req.body;
-  const query = `
-    UPDATE PROVEEDOR 
-    SET Nombre = ?, Direccion = ?, Telefono = ?, Email = ?, TipoProveedor = ?, Estado = ? 
-    WHERE idProveedor = ?
-  `;
-  db.query(query, [nombre, direccion, telefono, correo, tipoProveedor, estado, id], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Error al actualizar proveedor' });
-    res.json({ message: 'Proveedor actualizado exitosamente' });
-  });
-});
-
-// Eliminar proveedor
-app.delete('/api/proveedores/:id', (req, res) => {
-  const { id } = req.params;
-  const query = `DELETE FROM PROVEEDOR WHERE idProveedor = ?`;
-  db.query(query, [id], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Error al eliminar proveedor' });
-    res.json({ message: 'Proveedor eliminado exitosamente' });
-  });
-});
-
-
 // Inicia el servidor en el puerto especificado
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
